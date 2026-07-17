@@ -65,6 +65,15 @@ export default function CategoriasPage() {
 
       <div className="tablePanel">
         <table>
+          <colgroup>
+            <col style={{ width: "10%" }} />
+            <col style={{ width: "20%" }} />
+            <col style={{ width: "15%" }} />
+            <col style={{ width: "10%" }} />
+            <col style={{ width: "13%" }} />
+            <col style={{ width: "14%" }} />
+            <col style={{ width: "18%" }} />
+          </colgroup>
           <thead>
             <tr>
               <th>Codigo</th>
