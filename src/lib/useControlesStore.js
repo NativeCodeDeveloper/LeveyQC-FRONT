@@ -99,15 +99,49 @@ export function useControlPorId(controlId) {
 // actualiza la fecha del ultimo registro. Funciona tanto si el control es
 // semilla como si ya tenia cambios guardados antes.
 export function useRegistrarResultado() {
-  return useCallback((controlId, nivelId, nuevoValor) => {
+  return useCallback((controlId, nivelId, nuevoValor, usuarioResponsable) => {
     const controlActual = combinarControles(obtenerSnapshot()).find((control) => control.id === controlId);
     if (!controlActual) {
       return;
     }
 
+    // Momento del registro: se guarda una sola vez para que la fecha y la
+    // hora sean identicas en la tabla principal y en el historial detallado.
+    const momentoDelRegistro = new Date();
+    const fechaDelRegistro = momentoDelRegistro.toLocaleDateString("es-CL");
+    const horaDelRegistro = momentoDelRegistro.toLocaleTimeString("es-CL", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+
+    // Nivel modificado: permite guardar el indice exacto del nuevo punto y
+    // relacionarlo despues con su posicion en la carta Levey-Jennings.
+    const nivelModificado = controlActual.niveles.find((nivel) => nivel.id === nivelId);
+    if (!nivelModificado) {
+      return;
+    }
+
+    // Registro de auditoria ficticio: conserva quien ingreso el resultado,
+    // cuando lo hizo y sobre que control/nivel trabajo.
+    const nuevoRegistroDeAuditoria = {
+      id: `REG-${momentoDelRegistro.getTime()}-${nivelId}`,
+      nivelId,
+      indiceSerie: nivelModificado.valores.length,
+      valorIngresado: nuevoValor,
+      fechaIngreso: fechaDelRegistro,
+      fechaUltimaModificacion: fechaDelRegistro,
+      horaUltimaModificacion: horaDelRegistro,
+      usuarioResponsable: usuarioResponsable?.usuario ?? "usuario-demo",
+      nombreResponsable: usuarioResponsable?.nombre ?? "Usuario de demostracion",
+    };
+
     const controlActualizado = {
       ...controlActual,
-      fechaUltimoRegistro: new Date().toLocaleDateString("es-CL"),
+      fechaUltimoRegistro: fechaDelRegistro,
+      horaUltimoRegistro: horaDelRegistro,
+      usuarioUltimaModificacion: nuevoRegistroDeAuditoria.usuarioResponsable,
+      nombreUsuarioUltimaModificacion: nuevoRegistroDeAuditoria.nombreResponsable,
+      historialRegistros: [...(controlActual.historialRegistros ?? []), nuevoRegistroDeAuditoria],
       niveles: controlActual.niveles.map((nivel) =>
         nivel.id === nivelId ? { ...nivel, valores: [...nivel.valores, nuevoValor] } : nivel
       ),

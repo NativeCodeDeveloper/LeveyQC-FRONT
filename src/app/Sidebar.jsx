@@ -46,7 +46,7 @@ const analisisQC = {
 const menu = {
   titulo: "Menu",
   items: [
-    { etiqueta: "Proveedores" },
+    { etiqueta: "Proveedores", href: "/Proveedores" },
     { etiqueta: "Reservas" },
     { etiqueta: "Insumos" },
     { etiqueta: "Ubicacion" },
@@ -126,7 +126,7 @@ function ItemDeNavegacion({ item, pathname, grupoAbierto, alternarGrupo }) {
     );
   }
 
-  // Items que todavia no tienen pantalla propia (Proveedores, Reservas, etc):
+  // Items que todavia no tienen pantalla propia (Reservas, Insumos, etc):
   // se dejan como boton inerte para no romper la navegacion.
   return <button type="button" className={`${claseBase} text-left ${claseInactiva}`}>{item.etiqueta}</button>;
 }

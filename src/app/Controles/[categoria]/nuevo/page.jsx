@@ -123,6 +123,7 @@ export default function IngresoControlPage() {
       matriz,
       categoriaId: categoriaSeleccionada,
       analitoId: analitosSeleccionados[0]?.id ?? null,
+      fechaIngreso: new Date().toLocaleDateString("es-CL"),
       fechaCalibracion: new Date().toLocaleDateString("es-CL"),
       fechaCaducidad,
       estadoCalibracion,
