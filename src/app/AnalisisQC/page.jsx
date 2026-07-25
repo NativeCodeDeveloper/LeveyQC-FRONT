@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import { obtenerAnalitoPorId } from "@/lib/mockData";
 import { useRegistrarResultado, useTodosLosControles } from "@/lib/useControlesStore";
+import Card from "@/app/components/Card";
 
 // Usuario de muestra cuyo objetivo es habilitar el flujo visual de registro
 // sin conectarse a un servicio real de autenticacion.
@@ -71,7 +72,7 @@ function PanelAutenticacion({ usuarioAutenticado, alAutenticar, alCerrarSesion, 
   }
 
   return (
-    <section className="overflow-hidden rounded-xl border border-line bg-white shadow-[0_10px_30px_rgba(31,37,48,0.06)]">
+    <Card as="section">
       <div className="grid lg:grid-cols-[0.78fr_1.22fr]">
         <div className="relative overflow-hidden bg-accent-strong p-5 text-white sm:p-6">
           <div className="absolute -right-10 -top-12 size-36 rounded-full border border-white/10" aria-hidden="true" />
@@ -123,7 +124,7 @@ function PanelAutenticacion({ usuarioAutenticado, alAutenticar, alCerrarSesion, 
             </label>
             <button
               type="submit"
-              className="inline-flex h-10 items-center justify-center rounded-md bg-accent-strong px-5 text-[12px] font-semibold text-white transition hover:bg-[#14181e]"
+              className="inline-flex h-10 items-center justify-center rounded-md bg-accent-strong px-5 text-[12px] font-semibold text-white transition hover:bg-[#27272a]"
             >
               Ingresar
             </button>
@@ -140,7 +141,7 @@ function PanelAutenticacion({ usuarioAutenticado, alAutenticar, alCerrarSesion, 
           </div>
         </form>
       </div>
-    </section>
+    </Card>
   );
 }
 
@@ -280,7 +281,7 @@ export default function PaginaAnalisisQC() {
         </div>
       ) : null}
 
-      <section className="rounded-xl border border-line bg-white">
+      <Card as="section">
         <div className="border-b border-line px-4 py-4 sm:px-5">
           <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
             <div>
@@ -317,7 +318,7 @@ export default function PaginaAnalisisQC() {
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[1060px] table-fixed border-collapse">
+          <table className="w-full min-w-[940px] table-fixed border-collapse">
             <colgroup>
               <col className="w-[18%]" />
               <col className="w-[22%]" />
@@ -362,7 +363,7 @@ export default function PaginaAnalisisQC() {
                         type="button"
                         onClick={() => guardarResultado(fila)}
                         disabled={!usuarioAutenticado || !valoresPendientes[fila.clave]}
-                        className="h-9 w-[88px] shrink-0 whitespace-nowrap rounded-sm bg-accent-strong px-2 text-[11px] font-semibold text-white transition hover:bg-[#14181e] disabled:cursor-not-allowed disabled:bg-line-strong"
+                        className="h-9 w-[88px] shrink-0 whitespace-nowrap rounded-sm bg-accent-strong px-2 text-[11px] font-semibold text-white transition hover:bg-[#27272a] disabled:cursor-not-allowed disabled:bg-line-strong"
                       >
                         Registrar
                       </button>
@@ -370,8 +371,8 @@ export default function PaginaAnalisisQC() {
                     <p className="m-0 mt-1.5 text-[10.5px] text-ink-faint">Anterior: {fila.valorAnterior} {fila.nivel.unidad}</p>
                   </td>
                   <td className="px-4 py-3.5">
-                    <p className="m-0 text-[12px] font-medium tabular-nums text-ink">Media {fila.nivel.media}</p>
-                    <p className="m-0 mt-1 text-[11px] tabular-nums text-ink-muted">DE {fila.nivel.sd.toFixed(2)} · CV {fila.coeficienteVariacion}%</p>
+                    <p className="m-0 font-mono text-[12px] font-medium tabular-nums text-ink">Media {fila.nivel.media}</p>
+                    <p className="m-0 mt-1 font-mono text-[11px] tabular-nums text-ink-muted">DE {fila.nivel.sd.toFixed(2)} · CV {fila.coeficienteVariacion}%</p>
                   </td>
                   <td className="px-4 py-3.5">
                     <p className="m-0 max-w-[190px] truncate text-[12px] font-medium text-ink">{fila.control.nombre}</p>
@@ -400,7 +401,7 @@ export default function PaginaAnalisisQC() {
             </tbody>
           </table>
         </div>
-      </section>
+      </Card>
     </section>
   );
 }

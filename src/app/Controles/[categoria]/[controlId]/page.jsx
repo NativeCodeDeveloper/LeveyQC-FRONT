@@ -11,6 +11,7 @@ import { obtenerCategoriaPorId } from "@/lib/mockData";
 import { evaluateControl } from "@/lib/westgard";
 import { useControlPorId } from "@/lib/useControlesStore";
 import EstadoSemaforo from "../../EstadoSemaforo";
+import Card from "@/app/components/Card";
 
 export default function DetalleControlPage() {
   const { categoria: categoriaId, controlId } = useParams();
@@ -44,7 +45,7 @@ export default function DetalleControlPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-4 rounded-lg border border-line p-5 sm:grid-cols-3 lg:grid-cols-4">
+      <Card className="grid grid-cols-2 gap-4 p-5 sm:grid-cols-3 lg:grid-cols-4">
         <DatoControl etiqueta="Lote" valor={control.lote} />
         <DatoControl etiqueta="Fabricante" valor={control.fabricante} />
         <DatoControl etiqueta="Matriz" valor={control.matriz} />
@@ -53,12 +54,13 @@ export default function DetalleControlPage() {
         <DatoControl etiqueta="Fecha caducidad" valor={control.fechaCaducidad} />
         <DatoControl etiqueta="Stock" valor={control.stock} />
         <DatoControl etiqueta="Responsable" valor={control.responsable} />
-      </div>
+      </Card>
 
       <div>
         <h2 className="mb-3 text-[15px] font-semibold text-ink">Desglose por nivel (reglas de Westgard)</h2>
-        <div className="overflow-hidden rounded-lg border border-line">
-          <table className="w-full table-fixed border-collapse">
+        <Card>
+          <div className="overflow-x-auto">
+          <table className="w-full min-w-[560px] table-fixed border-collapse">
             <colgroup>
               <col className="w-[18%]" />
               <col className="w-[24%]" />
@@ -97,7 +99,8 @@ export default function DetalleControlPage() {
               })}
             </tbody>
           </table>
-        </div>
+          </div>
+        </Card>
         <p className="mt-3 text-xs text-ink-faint">
           Grafico de Levey-Jennings (visual, con bandas de +/-1SD, 2SD y 3SD): pendiente para la Fase 2.
         </p>

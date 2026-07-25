@@ -3,6 +3,7 @@
 // para la Fase 2, cuando haya backend.
 
 import { categorias, obtenerAnalitosPorCategoria } from "@/lib/mockData";
+import Card from "@/app/components/Card";
 
 export default function AnalitosConfiguracionPage() {
   return (
@@ -23,7 +24,7 @@ export default function AnalitosConfiguracionPage() {
         {categorias.map((categoria) => {
           const analitosDeCategoria = obtenerAnalitosPorCategoria(categoria.id);
           return (
-            <div key={categoria.id} className="rounded-lg border border-line p-4">
+            <Card key={categoria.id} className="p-4">
               <h2 className="m-0 mb-3 text-[11px] font-semibold uppercase tracking-wide text-ink-muted">
                 {categoria.nombre}
               </h2>
@@ -41,7 +42,7 @@ export default function AnalitosConfiguracionPage() {
               ) : (
                 <p className="m-0 text-[12px] text-ink-faint">Sin analitos cargados.</p>
               )}
-            </div>
+            </Card>
           );
         })}
       </div>

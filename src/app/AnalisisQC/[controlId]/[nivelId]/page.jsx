@@ -10,6 +10,7 @@ import { obtenerAnalitoPorId } from "@/lib/mockData";
 import { useControlPorId } from "@/lib/useControlesStore";
 import { ESTADOS, evaluateSeries as evaluarSerie } from "@/lib/westgard";
 import GraficoLeveyJennings from "../../GraficoLeveyJennings";
+import Card from "@/app/components/Card";
 
 // Textos y estilos cuyo objetivo es traducir el resultado tecnico de
 // Westgard a un estado visual comprensible para el usuario.
@@ -57,8 +58,8 @@ function TarjetaMetrica({ etiqueta, valor, unidad, detalle, tono = "neutro" }) {
   return (
     <div className={`rounded-xl border p-4 ${clasesPorTono[tono]}`}>
       <p className="m-0 text-[9.5px] font-semibold uppercase tracking-[0.08em] text-ink-faint">{etiqueta}</p>
-      <p className="m-0 mt-2 text-[20px] font-semibold tracking-[-0.025em] tabular-nums text-ink">
-        {valor} {unidad ? <span className="text-[10.5px] font-medium tracking-normal text-ink-muted">{unidad}</span> : null}
+      <p className="m-0 mt-2 font-mono text-[20px] font-semibold tracking-[-0.025em] tabular-nums text-ink">
+        {valor} {unidad ? <span className="font-sans text-[10.5px] font-medium tracking-normal text-ink-muted">{unidad}</span> : null}
       </p>
       <p className="m-0 mt-1 text-[10.5px] text-ink-muted">{detalle}</p>
     </div>
@@ -156,7 +157,7 @@ export default function PaginaDetalleControlAnalisis() {
         </Link>
       </header>
 
-      <section className="overflow-hidden rounded-xl border border-line bg-white">
+      <Card as="section">
         <div className="flex items-center justify-between border-b border-line px-4 py-3.5">
           <div>
             <h2 className="m-0 text-[13.5px] font-semibold text-ink">Identificación y trazabilidad</h2>
@@ -174,7 +175,7 @@ export default function PaginaDetalleControlAnalisis() {
           <DatoTrazabilidad etiqueta="Lote" valor={control.lote} secundario={control.matriz} />
           <DatoTrazabilidad etiqueta="Fecha de caducidad" valor={control.fechaCaducidad} secundario={control.estado} />
         </div>
-      </section>
+      </Card>
 
       <section className="grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
         <TarjetaMetrica etiqueta="Valor ingresado" valor={ultimoRegistro?.valorIngresado ?? "—"} unidad={nivel.unidad} detalle="Último resultado registrado" />
@@ -211,7 +212,7 @@ export default function PaginaDetalleControlAnalisis() {
       </div>
 
       {vistaActiva === "detalle" ? (
-        <section className="overflow-hidden rounded-xl border border-line bg-white">
+        <Card as="section">
           <div className="flex flex-wrap items-end justify-between gap-3 border-b border-line px-5 py-4">
             <div>
               <h2 className="m-0 text-[14px] font-semibold text-ink">Controles ingresados</h2>
@@ -220,7 +221,15 @@ export default function PaginaDetalleControlAnalisis() {
             <span className="rounded-full bg-accent-soft px-2.5 py-1 text-[10.5px] font-semibold text-accent">{historialDelNivel.length} registros</span>
           </div>
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[900px] border-collapse">
+            <table className="w-full min-w-[760px] table-fixed border-collapse">
+              <colgroup>
+                <col className="w-[9%]" />
+                <col className="w-[15%]" />
+                <col className="w-[18%]" />
+                <col className="w-[15%]" />
+                <col className="w-[25%]" />
+                <col className="w-[18%]" />
+              </colgroup>
               <thead>
                 <tr className="bg-surface-muted text-left text-[10px] font-semibold uppercase tracking-[0.06em] text-ink-muted">
                   <th className="px-4 py-3">Corrida</th>
@@ -236,13 +245,13 @@ export default function PaginaDetalleControlAnalisis() {
                   const presentacionRegistro = presentacionPorEstado[registro.estado];
                   return (
                     <tr key={registro.id} className="border-t border-line transition hover:bg-[#fbfbfc]">
-                      <td className="px-4 py-3 text-[12px] font-semibold tabular-nums text-ink">#{registro.numeroCorrida}</td>
+                      <td className="px-4 py-3 font-mono text-[12px] font-semibold tabular-nums text-ink">#{registro.numeroCorrida}</td>
                       <td className="px-4 py-3 text-[12px] text-ink-muted">{registro.fechaIngreso}</td>
                       <td className="px-4 py-3">
                         <p className="m-0 text-[12px] text-ink">{registro.fechaUltimaModificacion}</p>
                         <p className="m-0 mt-0.5 text-[10.5px] text-ink-faint">{registro.horaUltimaModificacion}</p>
                       </td>
-                      <td className="px-4 py-3 text-[12px] font-semibold tabular-nums text-ink">{registro.valorIngresado} {nivel.unidad}</td>
+                      <td className="px-4 py-3 font-mono text-[12px] font-semibold tabular-nums text-ink">{registro.valorIngresado} {nivel.unidad}</td>
                       <td className="px-4 py-3">
                         <span className={`inline-flex rounded-full px-2 py-1 text-[10px] font-semibold ${presentacionRegistro.clase}`}>{presentacionRegistro.texto}</span>
                         <p className="m-0 mt-1 text-[10px] text-ink-faint">{registro.reglas.length > 0 ? registro.reglas.join(", ") : "Sin violaciones"}</p>
@@ -257,7 +266,7 @@ export default function PaginaDetalleControlAnalisis() {
               </tbody>
             </table>
           </div>
-        </section>
+        </Card>
       ) : (
         <div className="flex flex-col gap-4">
           <GraficoLeveyJennings
@@ -272,12 +281,12 @@ export default function PaginaDetalleControlAnalisis() {
             loteControl={control.lote}
           />
 
-          <section className="grid overflow-hidden rounded-xl border border-line bg-white sm:grid-cols-4">
+          <Card as="section" className="grid sm:grid-cols-4">
             <DatoTrazabilidad etiqueta="Media" valor={`${nivel.media.toFixed(2)} ${nivel.unidad}`} secundario="Línea central" />
             <DatoTrazabilidad etiqueta="Rango ±1 DE" valor={`${(nivel.media - nivel.sd).toFixed(2)} — ${(nivel.media + nivel.sd).toFixed(2)}`} secundario="Zona esperada" />
             <DatoTrazabilidad etiqueta="Alerta ±2 DE" valor={`${(nivel.media - nivel.sd * 2).toFixed(2)} — ${(nivel.media + nivel.sd * 2).toFixed(2)}`} secundario="Límite de precaución" />
             <DatoTrazabilidad etiqueta="Control ±3 DE" valor={`${(nivel.media - nivel.sd * 3).toFixed(2)} — ${(nivel.media + nivel.sd * 3).toFixed(2)}`} secundario="Límite de rechazo" />
-          </section>
+          </Card>
         </div>
       )}
     </section>

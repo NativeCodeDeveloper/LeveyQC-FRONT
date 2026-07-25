@@ -1,6 +1,8 @@
 // Maqueta visual del registro de calibradores. Se mantiene como Server
 // Component porque solo presenta datos temporales y no necesita interactividad.
 
+import Card from "@/app/components/Card";
+
 // Datos de muestra cuyo objetivo es representar la estructura futura del
 // listado mientras no exista una fuente de datos real.
 const muestraCalibradores = [
@@ -80,7 +82,7 @@ export default function PaginaCalibradores() {
         </p>
       </div>
 
-      <section className="overflow-hidden rounded-xl border border-line bg-white shadow-[0_10px_35px_rgba(31,37,48,0.045)]">
+      <Card as="section">
         <div className="flex flex-wrap items-end justify-between gap-3 border-b border-line px-5 py-4">
           <div>
             <h2 className="m-0 text-[14px] font-semibold text-ink">Calibradores ingresados</h2>
@@ -92,7 +94,7 @@ export default function PaginaCalibradores() {
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[920px] table-fixed border-collapse">
+          <table className="w-full min-w-[760px] table-fixed border-collapse">
             <colgroup>
               <col className="w-[27%]" />
               <col className="w-[21%]" />
@@ -114,22 +116,22 @@ export default function PaginaCalibradores() {
                 <tr key={calibrador.id} className="border-t border-line transition hover:bg-[#fbfbfc]">
                   <td className="px-4 py-4">
                     <div className="flex min-w-0 items-center gap-3">
-                      <span className="flex size-9 shrink-0 items-center justify-center rounded-md bg-accent-strong text-[10px] font-bold text-white">
+                      <span className="flex size-9 shrink-0 items-center justify-center rounded-md bg-accent-strong font-mono text-[10px] font-bold text-white">
                         {String(indiceCalibrador + 1).padStart(2, "0")}
                       </span>
                       <div className="min-w-0">
                         <p className="m-0 truncate text-[12.5px] font-semibold text-ink">{calibrador.nombre}</p>
-                        <p className="m-0 mt-0.5 text-[10.5px] text-ink-faint">{calibrador.id}</p>
+                        <p className="m-0 mt-0.5 font-mono text-[10.5px] text-ink-faint">{calibrador.id}</p>
                       </div>
                     </div>
                   </td>
-                  <td className="px-4 py-4 text-[12px] font-medium text-ink-muted">{calibrador.proveedor}</td>
+                  <td className="max-w-0 truncate px-4 py-4 text-[12px] font-medium text-ink-muted">{calibrador.proveedor}</td>
                   <td className="px-4 py-4">
-                    <p className="m-0 text-[12px] font-semibold tabular-nums text-ink">{calibrador.fechaIngresoSistema}</p>
+                    <p className="m-0 font-mono text-[12px] font-semibold tabular-nums text-ink">{calibrador.fechaIngresoSistema}</p>
                     <p className="m-0 mt-1 text-[10px] text-ink-faint">Registro inicial</p>
                   </td>
                   <td className="px-4 py-4">
-                    <p className="m-0 text-[12px] font-semibold tabular-nums text-ink">{calibrador.fechaCaducidad}</p>
+                    <p className="m-0 font-mono text-[12px] font-semibold tabular-nums text-ink">{calibrador.fechaCaducidad}</p>
                     <span className="mt-1 inline-flex rounded-full bg-status-ok-soft px-2 py-0.5 text-[9.5px] font-semibold text-status-ok">
                       Vigente
                     </span>
@@ -143,7 +145,7 @@ export default function PaginaCalibradores() {
             </tbody>
           </table>
         </div>
-      </section>
+      </Card>
     </section>
   );
 }

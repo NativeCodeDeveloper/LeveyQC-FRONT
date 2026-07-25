@@ -88,7 +88,7 @@ export default function CategoriasPage() {
           <tbody>
             {mockCategories.map((category) => (
               <tr key={category.id}>
-                <td>{category.id}</td>
+                <td className="font-mono">{category.id}</td>
                 <td>
                   <strong>{category.name}</strong>
                 </td>

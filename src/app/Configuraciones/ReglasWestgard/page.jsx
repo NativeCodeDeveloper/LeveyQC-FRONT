@@ -3,6 +3,8 @@
 // semaforo de Controles. Poder elegir que reglas aplican por analito/nivel
 // queda para la Fase 2.
 
+import Card from "@/app/components/Card";
+
 const REGLAS = [
   { nombre: "1-2s", tipo: "Advertencia", detecta: "-", descripcion: "Un punto fuera de +/-2 SD. No rechaza por si sola, dispara la revision del resto de las reglas." },
   { nombre: "1-3s", tipo: "Rechazo", detecta: "Error aleatorio", descripcion: "Un punto fuera de +/-3 SD." },
@@ -28,8 +30,9 @@ export default function ReglasWestgardPage() {
         </p>
       </div>
 
-      <div className="overflow-hidden rounded-lg border border-line">
-        <table className="w-full table-fixed border-collapse">
+      <Card>
+        <div className="overflow-x-auto">
+        <table className="w-full min-w-[640px] table-fixed border-collapse">
           <colgroup>
             <col className="w-[12%]" />
             <col className="w-[14%]" />
@@ -65,7 +68,8 @@ export default function ReglasWestgardPage() {
             ))}
           </tbody>
         </table>
-      </div>
+        </div>
+      </Card>
     </section>
   );
 }

@@ -10,6 +10,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import { categorias, obtenerAnalitosPorCategoria, obtenerControlesPorCategoria } from "@/lib/mockData";
 import { useControlesDeCategoria } from "@/lib/useControlesStore";
+import Card from "@/app/components/Card";
 
 const MAXIMO_NIVELES = 5;
 
@@ -222,7 +223,7 @@ export default function IngresoControlPage() {
 
           <div>
             <span className="text-[12.5px] font-medium text-ink-muted">Analitos seleccionados</span>
-            <div className="mt-2 overflow-hidden rounded-md border border-line">
+            <Card className="mt-2">
               <table className="w-full border-collapse text-sm">
                 <thead>
                   <tr className="bg-surface-muted text-left text-[11px] font-semibold uppercase text-ink-muted">
@@ -256,7 +257,7 @@ export default function IngresoControlPage() {
                   ) : null}
                 </tbody>
               </table>
-            </div>
+            </Card>
           </div>
         </div>
 
@@ -355,7 +356,7 @@ export default function IngresoControlPage() {
           </button>
           <button
             type="submit"
-            className="inline-flex min-h-[36px] items-center justify-center rounded-lg bg-accent-strong px-5 text-[13px] font-medium text-white hover:bg-[#14181e]"
+            className="inline-flex min-h-[36px] items-center justify-center rounded-lg bg-accent-strong px-5 text-[13px] font-medium text-white hover:bg-[#27272a]"
           >
             Guardar
           </button>

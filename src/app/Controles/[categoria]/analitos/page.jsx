@@ -3,6 +3,7 @@
 
 import Link from "next/link";
 import { obtenerAnalitosPorCategoria, obtenerCategoriaPorId } from "@/lib/mockData";
+import Card from "@/app/components/Card";
 
 // Datos temporales cuyo objetivo es representar los registros diarios y
 // mensuales de cada analito mientras no exista una fuente de datos real.
@@ -232,7 +233,7 @@ export default async function PaginaAnalitosDeCategoria({ params }) {
           const registrosDelAnalito = muestraRegistrosPorAnalito[analito.id];
 
           return (
-            <article key={analito.id} className="overflow-hidden rounded-xl border border-line bg-white shadow-[0_1px_2px_rgba(29,29,31,0.04)]">
+            <Card as="article" key={analito.id}>
               <div className="flex flex-wrap items-center justify-between gap-4 border-b border-line px-5 py-4">
                 <div className="flex min-w-0 items-center gap-3.5">
                   <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-accent-strong text-[12px] font-semibold text-white">
@@ -263,7 +264,7 @@ export default async function PaginaAnalitosDeCategoria({ params }) {
                   Aun no hay registros de muestra para este analito.
                 </p>
               )}
-            </article>
+            </Card>
           );
         })}
 
@@ -295,7 +296,13 @@ function SeccionRegistrosDiarios({ registros }) {
       </div>
 
       <div className="overflow-x-auto rounded-lg border border-line">
-        <table className="w-full min-w-[540px] border-collapse">
+        <table className="w-full table-fixed border-collapse">
+          <colgroup>
+            <col className="w-[26%]" />
+            <col className="w-[32%]" />
+            <col className="w-[22%]" />
+            <col className="w-[20%]" />
+          </colgroup>
           <thead>
             <tr className="bg-surface-muted text-left text-[10px] font-semibold uppercase tracking-wide text-ink-muted">
               <th className="px-3 py-2.5">Fecha</th>
@@ -307,9 +314,9 @@ function SeccionRegistrosDiarios({ registros }) {
           <tbody>
             {registros.map((registro) => (
               <tr key={registro.fecha} className="border-t border-line">
-                <td className="whitespace-nowrap px-3 py-3 text-[12.5px] font-medium text-ink">{registro.fecha}</td>
-                <td className="whitespace-nowrap px-3 py-3 text-[12.5px] tabular-nums text-ink-muted">{registro.resultado}</td>
-                <td className="whitespace-nowrap px-3 py-3 text-[12.5px] tabular-nums text-ink-muted">{registro.desviacion}</td>
+                <td className="px-3 py-3 text-[12.5px] font-medium text-ink">{registro.fecha}</td>
+                <td className="px-3 py-3 text-[12.5px] tabular-nums text-ink-muted">{registro.resultado}</td>
+                <td className="px-3 py-3 text-[12.5px] tabular-nums text-ink-muted">{registro.desviacion}</td>
                 <td className="px-3 py-3">
                   <span className={`inline-flex rounded-full px-2 py-1 text-[10.5px] font-semibold ${clasesVisualesPorEstado[registro.estado]}`}>
                     {registro.estado}
@@ -338,7 +345,14 @@ function SeccionRegistrosMensuales({ registros, unidad }) {
       </div>
 
       <div className="overflow-x-auto rounded-lg border border-line">
-        <table className="w-full min-w-[510px] border-collapse">
+        <table className="w-full table-fixed border-collapse">
+          <colgroup>
+            <col className="w-[24%]" />
+            <col className="w-[14%]" />
+            <col className="w-[24%]" />
+            <col className="w-[16%]" />
+            <col className="w-[22%]" />
+          </colgroup>
           <thead>
             <tr className="bg-surface-muted text-left text-[10px] font-semibold uppercase tracking-wide text-ink-muted">
               <th className="px-3 py-2.5">Periodo</th>
@@ -351,9 +365,9 @@ function SeccionRegistrosMensuales({ registros, unidad }) {
           <tbody>
             {registros.map((registro) => (
               <tr key={registro.periodo} className="border-t border-line">
-                <td className="whitespace-nowrap px-3 py-3 text-[12.5px] font-medium text-ink">{registro.periodo}</td>
+                <td className="px-3 py-3 text-[12.5px] font-medium text-ink">{registro.periodo}</td>
                 <td className="px-3 py-3 text-center text-[12.5px] tabular-nums text-ink-muted">{registro.corridas}</td>
-                <td className="whitespace-nowrap px-3 py-3 text-[12.5px] tabular-nums text-ink-muted">
+                <td className="px-3 py-3 text-[12.5px] tabular-nums text-ink-muted">
                   {registro.promedio} <span className="text-[10px] text-ink-faint">{unidad}</span>
                 </td>
                 <td className="px-3 py-3 text-[12.5px] tabular-nums text-ink-muted">{registro.variacion}</td>

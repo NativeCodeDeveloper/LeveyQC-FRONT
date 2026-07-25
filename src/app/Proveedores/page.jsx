@@ -5,6 +5,8 @@
 
 import { useState } from "react";
 
+import Card from "@/app/components/Card";
+
 // Datos iniciales cuyo objetivo es centralizar los tres campos visibles del
 // formulario y facilitar su limpieza despues de cada registro.
 const formularioProveedorInicial = {
@@ -95,7 +97,7 @@ export default function PaginaProveedores() {
       ) : null}
 
       <div className="grid items-start gap-5 lg:grid-cols-[minmax(0,1.35fr)_minmax(280px,0.65fr)]">
-        <form onSubmit={guardarProveedor} className="overflow-hidden rounded-xl border border-line bg-white shadow-[0_10px_35px_rgba(31,37,48,0.045)]">
+        <Card as="form" onSubmit={guardarProveedor}>
           <div className="border-b border-line px-5 py-4 sm:px-6">
             <h2 className="m-0 text-[14px] font-semibold text-ink">Datos del proveedor</h2>
             <p className="m-0 mt-1 text-[10.5px] text-ink-faint">Completa los tres campos para agregar una empresa.</p>
@@ -145,13 +147,13 @@ export default function PaginaProveedores() {
             <button type="button" onClick={limpiarFormulario} className="h-10 rounded-sm border border-line-strong bg-white px-4 text-[12px] font-semibold text-ink-muted transition hover:bg-surface-muted hover:text-ink">
               Limpiar
             </button>
-            <button type="submit" className="h-10 rounded-sm bg-accent-strong px-5 text-[12px] font-semibold text-white transition hover:bg-[#14181e]">
+            <button type="submit" className="h-10 rounded-sm bg-accent-strong px-5 text-[12px] font-semibold text-white transition hover:bg-[#27272a]">
               Guardar proveedor
             </button>
           </div>
-        </form>
+        </Card>
 
-        <aside className="overflow-hidden rounded-xl border border-line bg-white shadow-[0_10px_35px_rgba(31,37,48,0.045)]">
+        <Card as="aside">
           <div className="border-b border-line px-5 py-4">
             <p className="m-0 text-[9.5px] font-semibold uppercase tracking-[0.1em] text-ink-faint">Vista previa</p>
             <h2 className="m-0 mt-1 text-[13.5px] font-semibold text-ink">Ficha del proveedor</h2>
@@ -171,10 +173,10 @@ export default function PaginaProveedores() {
               </p>
             </div>
           </div>
-        </aside>
+        </Card>
       </div>
 
-      <section className="overflow-hidden rounded-xl border border-line bg-white">
+      <Card as="section">
         <div className="flex flex-wrap items-end justify-between gap-3 border-b border-line px-5 py-4">
           <div>
             <h2 className="m-0 text-[14px] font-semibold text-ink">Proveedores ingresados</h2>
@@ -184,7 +186,7 @@ export default function PaginaProveedores() {
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[680px] table-fixed border-collapse">
+          <table className="w-full table-fixed border-collapse">
             <colgroup>
               <col className="w-[30%]" />
               <col className="w-[25%]" />
@@ -213,7 +215,7 @@ export default function PaginaProveedores() {
             </tbody>
           </table>
         </div>
-      </section>
+      </Card>
     </section>
   );
 }

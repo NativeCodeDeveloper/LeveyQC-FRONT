@@ -12,6 +12,7 @@ import { obtenerCategoriaPorId } from "@/lib/mockData";
 import { evaluateControl } from "@/lib/westgard";
 import { useControlesDeCategoria } from "@/lib/useControlesStore";
 import EstadoSemaforo from "../EstadoSemaforo";
+import Card from "@/app/components/Card";
 
 export default function ControlesDeCategoriaPage() {
   // useParams() en vez de la prop `params` porque este es un Client
@@ -62,7 +63,7 @@ export default function ControlesDeCategoriaPage() {
           </Link>
           <Link
             href={`/Controles/${categoriaId}/nuevo`}
-            className="inline-flex min-h-[36px] items-center justify-center rounded-md bg-accent-strong px-4 text-[13px] font-medium text-white transition hover:bg-[#14181e]"
+            className="inline-flex min-h-[36px] items-center justify-center rounded-md bg-accent-strong px-4 text-[13px] font-medium text-white transition hover:bg-[#27272a]"
           >
             Ingresar Control
           </Link>
@@ -80,8 +81,9 @@ export default function ControlesDeCategoriaPage() {
         />
       </label>
 
-      <div className="overflow-hidden rounded-lg border border-line">
-        <table className="w-full table-fixed border-collapse">
+      <Card>
+        <div className="overflow-x-auto">
+        <table className="w-full min-w-[760px] table-fixed border-collapse">
           <colgroup>
             <col className="w-[26%]" />
             <col className="w-[17%]" />
@@ -150,7 +152,8 @@ export default function ControlesDeCategoriaPage() {
             ) : null}
           </tbody>
         </table>
-      </div>
+        </div>
+      </Card>
     </section>
   );
 }
