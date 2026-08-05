@@ -10,6 +10,7 @@ import { obtenerAnalitoPorId } from "@/lib/mockData";
 import { useControlPorId } from "@/lib/useControlesStore";
 import { ESTADOS, evaluateSeries as evaluarSerie } from "@/lib/westgard";
 import GraficoLeveyJennings from "../../GraficoLeveyJennings";
+import GraficoLeveyJenningsCombinado from "../../GraficoLeveyJenningsCombinado";
 import Card from "@/app/components/Card";
 
 // Textos y estilos cuyo objetivo es traducir el resultado tecnico de
@@ -35,6 +36,42 @@ function formatearFechaDeMuestra(indice, cantidadRegistros) {
   const fechaDeMuestra = new Date(2026, 6, 19);
   fechaDeMuestra.setDate(fechaDeMuestra.getDate() - (cantidadRegistros - indice - 1));
   return fechaDeMuestra.toLocaleDateString("es-CL");
+}
+
+// Historial de UN nivel puntual: une las corridas semilla con las
+// auditorias creadas al registrar resultados desde Analisis QC. Funcion
+// pura (sin hooks) para poder calcularla tanto para el nivel de la URL
+// (historialDelNivel) como para TODOS los niveles del control a la vez
+// (historialPorNivel, usado por la carta combinada).
+function construirHistorialDeNivel(control, nivel) {
+  const auditoriasDelNivel = new Map(
+    (control.historialRegistros ?? [])
+      .filter((registro) => registro.nivelId === nivel.id)
+      .map((registro) => [registro.indiceSerie, registro])
+  );
+
+  return nivel.valores.map((valor, indice) => {
+    const auditoria = auditoriasDelNivel.get(indice);
+    const evaluacionDelRegistro = evaluarSerie(nivel.valores.slice(0, indice + 1), nivel.media, nivel.sd);
+    const fechaDeMuestra = formatearFechaDeMuestra(indice, nivel.valores.length);
+    const responsableDeMuestra = usuariosDeMuestraPorResponsable[control.responsable] ?? {
+      nombre: control.responsable ?? "Sin responsable",
+      usuario: "sin-usuario",
+    };
+
+    return {
+      id: auditoria?.id ?? `MUESTRA-${nivel.id}-${indice}`,
+      numeroCorrida: indice + 1,
+      fechaIngreso: auditoria?.fechaIngreso ?? fechaDeMuestra,
+      fechaUltimaModificacion: auditoria?.fechaUltimaModificacion ?? fechaDeMuestra,
+      horaUltimaModificacion: auditoria?.horaUltimaModificacion ?? "08:30",
+      valorIngresado: valor,
+      usuarioResponsable: auditoria?.usuarioResponsable ?? responsableDeMuestra.usuario,
+      nombreResponsable: auditoria?.nombreResponsable ?? responsableDeMuestra.nombre,
+      estado: evaluacionDelRegistro.estado,
+      reglas: evaluacionDelRegistro.reglas,
+    };
+  });
 }
 
 function DatoTrazabilidad({ etiqueta, valor, secundario }) {
@@ -74,6 +111,11 @@ export default function PaginaDetalleControlAnalisis() {
   // carta de control sin navegar fuera del detalle.
   const [vistaActiva, establecerVistaActiva] = useState("detalle");
 
+  // Modo del grafico cuyo objetivo es alternar entre el nivel de la URL
+  // (carta clasica de un nivel) y todos los niveles del control combinados
+  // en un solo grafico normalizado (ver GraficoLeveyJenningsCombinado).
+  const [modoGrafico, establecerModoGrafico] = useState("unNivel");
+
   const nivel = control?.niveles.find((nivelDelControl) => nivelDelControl.id === identificadorNivel);
   const analito = obtenerAnalitoPorId(control?.analitoId);
 
@@ -81,36 +123,18 @@ export default function PaginaDetalleControlAnalisis() {
   // creadas al registrar nuevos resultados desde Analisis QC.
   const historialDelNivel = useMemo(() => {
     if (!control || !nivel) return [];
-
-    const auditoriasDelNivel = new Map(
-      (control.historialRegistros ?? [])
-        .filter((registro) => registro.nivelId === nivel.id)
-        .map((registro) => [registro.indiceSerie, registro])
-    );
-
-    return nivel.valores.map((valor, indice) => {
-      const auditoria = auditoriasDelNivel.get(indice);
-      const evaluacionDelRegistro = evaluarSerie(nivel.valores.slice(0, indice + 1), nivel.media, nivel.sd);
-      const fechaDeMuestra = formatearFechaDeMuestra(indice, nivel.valores.length);
-      const responsableDeMuestra = usuariosDeMuestraPorResponsable[control.responsable] ?? {
-        nombre: control.responsable ?? "Sin responsable",
-        usuario: "sin-usuario",
-      };
-
-      return {
-        id: auditoria?.id ?? `MUESTRA-${nivel.id}-${indice}`,
-        numeroCorrida: indice + 1,
-        fechaIngreso: auditoria?.fechaIngreso ?? fechaDeMuestra,
-        fechaUltimaModificacion: auditoria?.fechaUltimaModificacion ?? fechaDeMuestra,
-        horaUltimaModificacion: auditoria?.horaUltimaModificacion ?? "08:30",
-        valorIngresado: valor,
-        usuarioResponsable: auditoria?.usuarioResponsable ?? responsableDeMuestra.usuario,
-        nombreResponsable: auditoria?.nombreResponsable ?? responsableDeMuestra.nombre,
-        estado: evaluacionDelRegistro.estado,
-        reglas: evaluacionDelRegistro.reglas,
-      };
-    });
+    return construirHistorialDeNivel(control, nivel);
   }, [control, nivel]);
+
+  // Mismo historial, pero de TODOS los niveles del control a la vez: es lo
+  // que necesita la carta combinada para poder mostrarlos juntos.
+  const historialPorNivel = useMemo(() => {
+    if (!control) return [];
+    return control.niveles.map((nivelDelControl) => ({
+      nivel: nivelDelControl,
+      historial: construirHistorialDeNivel(control, nivelDelControl),
+    }));
+  }, [control]);
 
   if (!control || !nivel) {
     return (
@@ -269,17 +293,57 @@ export default function PaginaDetalleControlAnalisis() {
         </Card>
       ) : (
         <div className="flex flex-col gap-4">
-          <GraficoLeveyJennings
-            valores={nivel.valores}
-            registros={historialDelNivel}
-            media={nivel.media}
-            desviacionEstandar={nivel.sd}
-            unidad={nivel.unidad}
-            nombreAnalito={analito?.nombre ?? "Analito sin nombre"}
-            nombreNivel={nivel.nombre}
-            nombreControl={control.nombre}
-            loteControl={control.lote}
-          />
+          {control.niveles.length > 1 ? (
+            <div className="flex w-fit rounded-lg border border-line bg-surface-muted p-1" role="tablist" aria-label="Niveles a mostrar en el gráfico">
+              <button
+                type="button"
+                role="tab"
+                aria-selected={modoGrafico === "unNivel"}
+                onClick={() => establecerModoGrafico("unNivel")}
+                className={`rounded-md px-3.5 py-1.5 text-[11px] font-semibold transition ${modoGrafico === "unNivel" ? "bg-white text-ink shadow-sm" : "text-ink-muted hover:text-ink"}`}
+              >
+                Un nivel ({nivel.nombre})
+              </button>
+              <button
+                type="button"
+                role="tab"
+                aria-selected={modoGrafico === "combinado"}
+                onClick={() => establecerModoGrafico("combinado")}
+                className={`rounded-md px-3.5 py-1.5 text-[11px] font-semibold transition ${modoGrafico === "combinado" ? "bg-white text-ink shadow-sm" : "text-ink-muted hover:text-ink"}`}
+              >
+                Todos los niveles (SDI)
+              </button>
+            </div>
+          ) : null}
+
+          {modoGrafico === "combinado" && control.niveles.length > 1 ? (
+            <GraficoLeveyJenningsCombinado
+              niveles={historialPorNivel.map(({ nivel: nivelDelControl, historial }) => ({
+                nivelId: nivelDelControl.id,
+                nombreNivel: nivelDelControl.nombre,
+                unidad: nivelDelControl.unidad,
+                valores: nivelDelControl.valores,
+                registros: historial,
+                media: nivelDelControl.media,
+                sd: nivelDelControl.sd,
+              }))}
+              nombreAnalito={analito?.nombre ?? "Analito sin nombre"}
+              nombreControl={control.nombre}
+              loteControl={control.lote}
+            />
+          ) : (
+            <GraficoLeveyJennings
+              valores={nivel.valores}
+              registros={historialDelNivel}
+              media={nivel.media}
+              desviacionEstandar={nivel.sd}
+              unidad={nivel.unidad}
+              nombreAnalito={analito?.nombre ?? "Analito sin nombre"}
+              nombreNivel={nivel.nombre}
+              nombreControl={control.nombre}
+              loteControl={control.lote}
+            />
+          )}
 
           <Card as="section" className="grid sm:grid-cols-4">
             <DatoTrazabilidad etiqueta="Media" valor={`${nivel.media.toFixed(2)} ${nivel.unidad}`} secundario="Línea central" />

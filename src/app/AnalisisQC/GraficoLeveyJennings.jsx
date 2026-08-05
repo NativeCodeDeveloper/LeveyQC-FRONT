@@ -5,6 +5,15 @@
 // estetica blanca, limpia e interactiva, sin dependencias de graficos.
 
 import { useState } from "react";
+import {
+  colorAlerta,
+  colorControl,
+  colorMedia,
+  colorResultado,
+  obtenerEstadoDelPunto,
+  obtenerFechaCompleta,
+  obtenerFechaCorta,
+} from "./graficoLeveyJenningsUtils";
 
 const anchoGrafico = 1120;
 const altoGrafico = 520;
@@ -12,15 +21,6 @@ const margenGrafico = { superior: 46, derecho: 92, inferior: 76, izquierdo: 98 }
 const anchoAreaDatos = anchoGrafico - margenGrafico.izquierdo - margenGrafico.derecho;
 const altoAreaDatos = altoGrafico - margenGrafico.superior - margenGrafico.inferior;
 const nivelesDesviacion = [3, 2, 1, 0, -1, -2, -3];
-
-const colorResultado = "#157a70";
-const colorMedia = "#c34f71";
-const colorAlerta = "#a6690a";
-const colorControl = "#b3392f";
-const nombresDeMeses = [
-  "enero", "febrero", "marzo", "abril", "mayo", "junio",
-  "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre",
-];
 
 export default function GraficoLeveyJennings({
   valores,
@@ -54,28 +54,6 @@ export default function GraficoLeveyJennings({
   function convertirIndiceEnX(indice) {
     if (valoresVisibles.length <= 1) return margenGrafico.izquierdo + anchoAreaDatos / 2;
     return margenGrafico.izquierdo + (indice / (valoresVisibles.length - 1)) * anchoAreaDatos;
-  }
-
-  function obtenerEstadoDelPunto(puntajeZ) {
-    if (Math.abs(puntajeZ) > 3) return { texto: "Fuera de control", color: colorControl };
-    if (Math.abs(puntajeZ) > 2) return { texto: "Alerta", color: colorAlerta };
-    return { texto: "En control", color: colorResultado };
-  }
-
-  function obtenerFechaCorta(fecha) {
-    if (!fecha) return "Sin fecha";
-    const partesDeFecha = fecha.split(/[-/]/);
-    return partesDeFecha.length >= 2 ? `${partesDeFecha[0]}/${partesDeFecha[1]}` : fecha;
-  }
-
-  function obtenerFechaCompleta(fecha, hora) {
-    if (!fecha) return `Sin fecha · ${hora || "Sin hora"}`;
-    const partesDeFecha = fecha.split(/[-/]/);
-    if (partesDeFecha.length < 3) return `${fecha} · ${hora || "Sin hora"}`;
-
-    const [dia, mes, anio] = partesDeFecha;
-    const nombreDelMes = nombresDeMeses[Number(mes) - 1] ?? mes;
-    return `${dia} de ${nombreDelMes} de ${anio} · ${hora || "Sin hora"}`;
   }
 
   const puntosGraficados = valoresVisibles.map((valor, indice) => ({

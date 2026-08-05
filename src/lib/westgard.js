@@ -128,3 +128,53 @@ export function evaluateControl(niveles) {
 
   return { estado, reglas: reglasDisparadas, detallePorNivel };
 }
+
+// Clasificacion de "Validado" para el ultimo valor de un nivel puntual (no
+// la serie completa): el badge de color que se muestra en la pantalla
+// Registro QC (Analisis QC) para decidir, de un vistazo, si ese resultado
+// necesita revision. Distinta de evaluateControl/evaluateSeries de arriba,
+// que miran la serie historica completa contra las reglas multi-punto de
+// Westgard: aca se clasifica un solo punto por su puntaje z, que es el
+// criterio que pidio el laboratorio para esta columna.
+export const NIVELES_VALIDACION = {
+  VALIDADO: "validado",
+  REVISAR: "revisar",
+  RECHAZADO: "rechazado",
+};
+
+export function clasificarValidacion(valor, nivel) {
+  if (valor == null || Number.isNaN(valor) || !nivel?.sd) {
+    return { clasificacion: NIVELES_VALIDACION.VALIDADO, z: 0 };
+  }
+
+  const z = (valor - nivel.media) / nivel.sd;
+  const zAbsoluto = Math.abs(z);
+
+  if (zAbsoluto > 3) {
+    return { clasificacion: NIVELES_VALIDACION.RECHAZADO, z };
+  }
+  if (zAbsoluto > 2) {
+    return { clasificacion: NIVELES_VALIDACION.REVISAR, z };
+  }
+  return { clasificacion: NIVELES_VALIDACION.VALIDADO, z };
+}
+
+// Sesgo (bias, %): que tan lejos esta un valor de la media del nivel,
+// como porcentaje de esa media. Se muestra junto a DE y CV en "Parametros
+// QC" (los tres indicadores clasicos de control de calidad tipo
+// Levey-Jennings).
+export function calcularSesgo(valor, nivel) {
+  if (valor == null || Number.isNaN(valor) || !nivel?.media) {
+    return 0;
+  }
+  return ((valor - nivel.media) / nivel.media) * 100;
+}
+
+// Comentario sugerido para la columna "Comentario" de Registro QC, segun la
+// clasificacion de arriba. Es un punto de partida editable, no un texto
+// fijo: el tecnologo lo puede complementar antes de registrar.
+export const COMENTARIOS_SUGERIDOS = {
+  [NIVELES_VALIDACION.VALIDADO]: "No aplica.",
+  [NIVELES_VALIDACION.REVISAR]: "Acción riesgosa, se recomienda repetir control.",
+  [NIVELES_VALIDACION.RECHAZADO]: "Resultado fuera de control, no informar. Repetir control y notificar al supervisor.",
+};

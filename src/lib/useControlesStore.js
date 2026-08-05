@@ -99,7 +99,7 @@ export function useControlPorId(controlId) {
 // actualiza la fecha del ultimo registro. Funciona tanto si el control es
 // semilla como si ya tenia cambios guardados antes.
 export function useRegistrarResultado() {
-  return useCallback((controlId, nivelId, nuevoValor, usuarioResponsable) => {
+  return useCallback((controlId, nivelId, nuevoValor, usuarioResponsable, comentario) => {
     const controlActual = combinarControles(obtenerSnapshot()).find((control) => control.id === controlId);
     if (!controlActual) {
       return;
@@ -128,6 +128,7 @@ export function useRegistrarResultado() {
       nivelId,
       indiceSerie: nivelModificado.valores.length,
       valorIngresado: nuevoValor,
+      comentario: comentario?.trim() || "",
       fechaIngreso: fechaDelRegistro,
       fechaUltimaModificacion: fechaDelRegistro,
       horaUltimaModificacion: horaDelRegistro,
