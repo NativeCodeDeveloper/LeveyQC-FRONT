@@ -30,7 +30,12 @@ export default function RootLayout({ children }) {
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full">
-        <ClerkProvider localization={esES}>
+        <ClerkProvider
+          localization={esES}
+          signInUrl="/sign-in"
+          signInFallbackRedirectUrl="/"
+          signUpFallbackRedirectUrl="/"
+        >
           <AppShell>{children}</AppShell>
         </ClerkProvider>
       </body>
