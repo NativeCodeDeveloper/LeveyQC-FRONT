@@ -33,6 +33,7 @@ const grupos = [
         })),
       },
       { etiqueta: "Calibradores", href: "/Calibradores", icono: "calibradores" },
+      { etiqueta: "Control de Pares", href: "/ControlDePares", icono: "controlPares" },
       { etiqueta: "Reglas Westgard", href: "/Configuraciones/ReglasWestgard", icono: "reglas" },
       { etiqueta: "Reportes", icono: "reportes" },
     ],
@@ -42,7 +43,6 @@ const grupos = [
     titulo: "Gestión",
     iconoRiel: "equipos",
     items: [
-      { etiqueta: "Control de Pares", href: "/ControlDePares", icono: "controlPares" },
       { etiqueta: "Equipos / Analizadores", icono: "equipos" },
       { etiqueta: "Reactivos / Lotes", icono: "reactivos" },
       { etiqueta: "Muestras / Resultados", icono: "muestras" },

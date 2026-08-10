@@ -19,19 +19,19 @@ export const categorias = [
 
 // Analitos que se controlan en cada categoria.
 export const analitos = [
-  { id: "glucosa", nombre: "Glucosa", unidad: "mg/dL", categoriaId: "quimica" },
-  { id: "colesterol", nombre: "Colesterol total", unidad: "mg/dL", categoriaId: "quimica" },
-  { id: "creatinina", nombre: "Creatinina", unidad: "mg/dL", categoriaId: "quimica" },
-  { id: "hemoglobina", nombre: "Hemoglobina", unidad: "g/dL", categoriaId: "hematologia" },
-  { id: "hematocrito", nombre: "Hematocrito", unidad: "%", categoriaId: "hematologia" },
-  { id: "leucocitos", nombre: "Leucocitos", unidad: "x10^3/uL", categoriaId: "hematologia" },
-  { id: "tsh", nombre: "TSH", unidad: "uUI/mL", categoriaId: "hormonas" },
-  { id: "t4-libre", nombre: "T4 libre", unidad: "ng/dL", categoriaId: "hormonas" },
-  { id: "recuento-colonias", nombre: "Recuento de colonias", unidad: "UFC/mL", categoriaId: "microbiologia" },
-  { id: "carga-parasitaria", nombre: "Carga parasitaria", unidad: "parasitos/campo", categoriaId: "parasitologia" },
-  { id: "carga-viral", nombre: "Carga viral", unidad: "copias/mL", categoriaId: "biologia-molecular" },
-  { id: "hemoglobina-donante", nombre: "Hemoglobina donante", unidad: "g/dL", categoriaId: "banco-de-sangre" },
-  { id: "indice-reactividad", nombre: "Indice de reactividad", unidad: "S/CO", categoriaId: "serologia" },
+  { id: "glucosa", idNumerico: 1, nombre: "Glucosa", abreviacion: "GLU", unidad: "mg/dL", categoriaId: "quimica" },
+  { id: "colesterol", idNumerico: 2, nombre: "Colesterol total", abreviacion: "COL", unidad: "mg/dL", categoriaId: "quimica" },
+  { id: "creatinina", idNumerico: 3, nombre: "Creatinina", abreviacion: "CREA", unidad: "mg/dL", categoriaId: "quimica" },
+  { id: "hemoglobina", idNumerico: 4, nombre: "Hemoglobina", abreviacion: "HGB", unidad: "g/dL", categoriaId: "hematologia" },
+  { id: "hematocrito", idNumerico: 5, nombre: "Hematocrito", abreviacion: "HCT", unidad: "%", categoriaId: "hematologia" },
+  { id: "leucocitos", idNumerico: 6, nombre: "Leucocitos", abreviacion: "WBC", unidad: "x10^3/uL", categoriaId: "hematologia" },
+  { id: "tsh", idNumerico: 7, nombre: "TSH", abreviacion: "TSH", unidad: "uUI/mL", categoriaId: "hormonas" },
+  { id: "t4-libre", idNumerico: 8, nombre: "T4 libre", abreviacion: "FT4", unidad: "ng/dL", categoriaId: "hormonas" },
+  { id: "recuento-colonias", idNumerico: 9, nombre: "Recuento de colonias", abreviacion: "UFC", unidad: "UFC/mL", categoriaId: "microbiologia" },
+  { id: "carga-parasitaria", idNumerico: 10, nombre: "Carga parasitaria", abreviacion: "CP", unidad: "parasitos/campo", categoriaId: "parasitologia" },
+  { id: "carga-viral", idNumerico: 11, nombre: "Carga viral", abreviacion: "CV", unidad: "copias/mL", categoriaId: "biologia-molecular" },
+  { id: "hemoglobina-donante", idNumerico: 12, nombre: "Hemoglobina donante", abreviacion: "HGB-D", unidad: "g/dL", categoriaId: "banco-de-sangre" },
+  { id: "indice-reactividad", idNumerico: 13, nombre: "Indice de reactividad", abreviacion: "IR", unidad: "S/CO", categoriaId: "serologia" },
 ];
 
 // Patrones de puntaje z (cuantas SD se aleja cada punto de la media) usados

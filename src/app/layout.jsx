@@ -1,6 +1,7 @@
+import { ClerkProvider } from "@clerk/nextjs";
+import { esES } from "@clerk/localizations";
 import { Geist, Geist_Mono } from "next/font/google";
-import Sidebar from "./Sidebar";
-import UserMenu from "./components/UserMenu";
+import AppShell from "./components/AppShell";
 import "./globals.css";
 
 // El layout se mantiene como Server Component (puede exportar `metadata`).
@@ -29,15 +30,9 @@ export default function RootLayout({ children }) {
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full">
-        <div className="grid min-h-screen grid-cols-[auto_minmax(0,1fr)] bg-canvas max-[860px]:grid-cols-1">
-          <Sidebar />
-          <div className="flex min-w-0 flex-col">
-            <header className="sticky top-0 z-30 flex h-16 shrink-0 items-center justify-end border-b border-line bg-white px-6">
-              <UserMenu />
-            </header>
-            <main className="min-w-0 p-9 max-[860px]:p-[24px_18px]">{children}</main>
-          </div>
-        </div>
+        <ClerkProvider localization={esES}>
+          <AppShell>{children}</AppShell>
+        </ClerkProvider>
       </body>
     </html>
   );

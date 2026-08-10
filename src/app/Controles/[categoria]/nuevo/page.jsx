@@ -14,6 +14,12 @@ import Card from "@/app/components/Card";
 
 const MAXIMO_NIVELES = 5;
 
+const mockAnalitosTabla = [
+  { id: "mock-hematocrito", idNumerico: 5, nombre: "Hematocrito", abreviacion: "HCT", unidad: "%" },
+  { id: "mock-hemoglobina", idNumerico: 4, nombre: "Hemoglobina", abreviacion: "HGB", unidad: "g/dL" },
+  { id: "mock-leucocitos", idNumerico: 6, nombre: "Leucocitos", abreviacion: "WBC", unidad: "x10^3/uL" },
+];
+
 function CampoTexto({ etiqueta, valor, onCambio, placeholder, tipo = "text", requerido = false }) {
   return (
     <label className="flex flex-col gap-2">
@@ -167,8 +173,8 @@ export default function IngresoControlPage() {
         </h1>
       </div>
 
-      <form onSubmit={manejarGuardar} className="grid grid-cols-1 gap-8 lg:grid-cols-3">
-        {/* Columna 1: datos del control */}
+      <form onSubmit={manejarGuardar} className="grid grid-cols-1 gap-8 lg:grid-cols-2">
+        {/* Columna 1: datos del control + control previo + niveles */}
         <div className="flex flex-col gap-4">
           <CampoTexto etiqueta="Nombre nuevo control" valor={nombreControl} onCambio={setNombreControl} placeholder="Ej. Diagon-D" requerido />
           <CampoTexto etiqueta="Numero de lote" valor={numeroLote} onCambio={setNumeroLote} placeholder="Ej. 0000LSU6" />
@@ -176,6 +182,41 @@ export default function IngresoControlPage() {
           <CampoTexto etiqueta="Matriz" valor={matriz} onCambio={setMatriz} placeholder="Ej. Suero" />
           <CampoTexto etiqueta="Fecha de caducidad" tipo="date" valor={fechaCaducidad} onCambio={setFechaCaducidad} />
           <CampoTexto etiqueta="Estado calibracion" valor={estadoCalibracion} onCambio={setEstadoCalibracion} placeholder="Ej. Calibrado" />
+
+          <label className="flex flex-col gap-2">
+            <span className="text-[12.5px] font-medium text-ink-muted">Unidades en stock</span>
+            <input
+              type="number"
+              min={0}
+              value={unidadesEnStock}
+              onChange={(evento) => setUnidadesEnStock(evento.target.value)}
+              className="h-10 w-24 rounded-lg border border-line-strong px-3 outline-none focus:border-accent focus:ring-2 focus:ring-accent-soft"
+            />
+          </label>
+
+          <div className="flex flex-col gap-2">
+            <span className="text-[12.5px] font-medium text-ink-muted">
+              Cantidad de niveles (max {MAXIMO_NIVELES})
+            </span>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => cambiarCantidadNiveles(cantidadNiveles - 1)}
+                className="h-9 w-9 rounded-md border border-line-strong text-lg font-bold text-ink-muted hover:bg-surface-muted"
+              >
+                -
+              </button>
+              <span className="w-8 text-center text-[13px] font-medium text-ink">{cantidadNiveles}</span>
+              <button
+                type="button"
+                onClick={() => cambiarCantidadNiveles(cantidadNiveles + 1)}
+                className="h-9 w-9 rounded-md border border-line-strong text-lg font-bold text-ink-muted hover:bg-surface-muted"
+              >
+                +
+              </button>
+            </div>
+          </div>
+
         </div>
 
         {/* Columna 2: categoria + analitos que controla */}
@@ -195,158 +236,92 @@ export default function IngresoControlPage() {
             </select>
           </label>
 
-          <label className="flex flex-col gap-2">
-            <span className="text-[12.5px] font-medium text-ink-muted">Analito que controla</span>
-            <input
-              type="search"
-              value={busquedaAnalito}
-              onChange={(evento) => setBusquedaAnalito(evento.target.value)}
-              placeholder="Buscar..."
-              className="h-9 rounded-md border border-line-strong px-3 outline-none focus:border-accent focus:ring-2 focus:ring-accent-soft"
-            />
-          </label>
-
-          {resultadosBusquedaAnalito.length > 0 ? (
-            <div className="flex flex-wrap gap-2">
-              {resultadosBusquedaAnalito.map((analito) => (
-                <button
-                  key={analito.id}
-                  type="button"
-                  onClick={() => seleccionarAnalito(analito)}
-                  className="rounded-full border border-line-strong px-3 py-1 text-xs font-semibold text-ink-muted transition hover:bg-surface-muted"
-                >
-                  + {analito.nombre}
-                </button>
-              ))}
+          <div className="flex flex-col gap-2">
+            <label htmlFor="analito-control" className="text-[12.5px] font-medium text-ink-muted">
+              Analito que controla
+            </label>
+            <div className="flex flex-col gap-2 sm:flex-row">
+              <select
+                id="analito-control"
+                defaultValue=""
+                className="h-9 min-w-0 flex-1 rounded-md border border-line-strong bg-white px-3 text-ink outline-none focus:border-accent focus:ring-2 focus:ring-accent-soft"
+              >
+                <option value="" disabled>
+                  Seleccionar analito
+                </option>
+                {analitosDeLaCategoria.map((analito) => (
+                  <option key={analito.id} value={analito.id}>
+                    {analito.nombre} · {analito.abreviacion} · {analito.unidad}
+                  </option>
+                ))}
+              </select>
+              <button
+                type="button"
+                className="inline-flex h-9 items-center justify-center rounded-md bg-accent-strong px-5 text-[13px] font-medium text-white hover:bg-[#27272a]"
+              >
+                Cargar
+              </button>
             </div>
-          ) : null}
+          </div>
 
           <div>
             <span className="text-[12.5px] font-medium text-ink-muted">Analitos seleccionados</span>
             <Card className="mt-2">
-              <table className="w-full border-collapse text-sm">
-                <thead>
-                  <tr className="bg-surface-muted text-left text-[11px] font-semibold uppercase text-ink-muted">
-                    <th className="px-3 py-2">ID</th>
-                    <th className="px-3 py-2">Analito</th>
-                    <th className="px-3 py-2">Acciones</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {analitosSeleccionados.map((analito) => (
-                    <tr key={analito.id} className="border-t border-line">
-                      <td className="px-3 py-2 text-ink-muted">{analito.id}</td>
-                      <td className="px-3 py-2 text-ink">{analito.nombre}</td>
-                      <td className="px-3 py-2">
-                        <button
-                          type="button"
-                          onClick={() => eliminarAnalito(analito.id)}
-                          className="text-xs font-semibold text-status-alert hover:underline"
-                        >
-                          Eliminar
-                        </button>
-                      </td>
+              <div className="overflow-x-auto">
+                <table className="min-w-[640px] border-collapse text-sm">
+                  <thead>
+                    <tr className="bg-surface-muted text-left text-[11px] font-semibold uppercase text-ink-muted">
+                      <th className="whitespace-nowrap px-3 py-2">ID</th>
+                      <th className="whitespace-nowrap px-3 py-2">Analito</th>
+                      <th className="whitespace-nowrap px-3 py-2">Abreviacion</th>
+                      <th className="whitespace-nowrap px-3 py-2">Unidad de medida</th>
+                      <th className="whitespace-nowrap px-3 py-2">Acciones</th>
                     </tr>
-                  ))}
-                  {analitosSeleccionados.length === 0 ? (
-                    <tr>
-                      <td colSpan={3} className="px-3 py-3 text-center text-xs text-ink-faint">
-                        Todavia no hay analitos seleccionados.
-                      </td>
-                    </tr>
-                  ) : null}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {analitosSeleccionados.map((analito) => (
+                      <tr key={analito.id} className="border-t border-line">
+                        <td className="whitespace-nowrap px-3 py-2 text-ink-muted">{analito.idNumerico}</td>
+                        <td className="whitespace-nowrap px-3 py-2 text-ink">{analito.nombre}</td>
+                        <td className="whitespace-nowrap px-3 py-2 text-ink-muted">{analito.abreviacion}</td>
+                        <td className="whitespace-nowrap px-3 py-2 text-ink-muted">{analito.unidad}</td>
+                        <td className="whitespace-nowrap px-3 py-2">
+                          <button
+                            type="button"
+                            onClick={() => eliminarAnalito(analito.id)}
+                            className="text-xs font-semibold text-status-alert hover:underline"
+                          >
+                            Descartar
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                    {analitosSeleccionados.length === 0
+                      ? mockAnalitosTabla.map((analito) => (
+                          <tr key={analito.id} className="border-t border-line">
+                            <td className="whitespace-nowrap px-3 py-2 text-ink-muted">{analito.idNumerico}</td>
+                            <td className="whitespace-nowrap px-3 py-2 text-ink">{analito.nombre}</td>
+                            <td className="whitespace-nowrap px-3 py-2 text-ink-muted">{analito.abreviacion}</td>
+                            <td className="whitespace-nowrap px-3 py-2 text-ink-muted">{analito.unidad}</td>
+                            <td className="whitespace-nowrap px-3 py-2">
+                              <button
+                                type="button"
+                                className="text-xs font-semibold text-status-alert hover:underline"
+                              >
+                                Descartar
+                              </button>
+                            </td>
+                          </tr>
+                        ))
+                      : null}
+                  </tbody>
+                </table>
+              </div>
             </Card>
           </div>
         </div>
 
-        {/* Columna 3: control previo + niveles */}
-        <div className="flex flex-col gap-4">
-          <label className="flex flex-col gap-2">
-            <span className="text-[12.5px] font-medium text-ink-muted">Control previo seleccionado</span>
-            <select
-              value={controlPrevioId}
-              onChange={(evento) => setControlPrevioId(evento.target.value)}
-              className="h-9 rounded-md border border-line-strong px-3 outline-none focus:border-accent focus:ring-2 focus:ring-accent-soft"
-            >
-              <option value="">Ninguno</option>
-              {controlesPrevios.map((control) => (
-                <option key={control.id} value={control.id}>
-                  {control.nombre}
-                </option>
-              ))}
-            </select>
-          </label>
-
-          <div className="flex items-end gap-4">
-            <div className="flex flex-col gap-2">
-              <span className="text-[12.5px] font-medium text-ink-muted">
-                Cantidad de niveles (max {MAXIMO_NIVELES})
-              </span>
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => cambiarCantidadNiveles(cantidadNiveles - 1)}
-                  className="h-9 w-9 rounded-md border border-line-strong text-lg font-bold text-ink-muted hover:bg-surface-muted"
-                >
-                  -
-                </button>
-                <span className="w-8 text-center text-[13px] font-medium text-ink">{cantidadNiveles}</span>
-                <button
-                  type="button"
-                  onClick={() => cambiarCantidadNiveles(cantidadNiveles + 1)}
-                  className="h-9 w-9 rounded-md border border-line-strong text-lg font-bold text-ink-muted hover:bg-surface-muted"
-                >
-                  +
-                </button>
-              </div>
-            </div>
-
-            <label className="flex flex-col gap-2">
-              <span className="text-[12.5px] font-medium text-ink-muted">Unidades en stock</span>
-              <input
-                type="number"
-                min={0}
-                value={unidadesEnStock}
-                onChange={(evento) => setUnidadesEnStock(evento.target.value)}
-                className="h-10 w-24 rounded-lg border border-line-strong px-3 outline-none focus:border-accent focus:ring-2 focus:ring-accent-soft"
-              />
-            </label>
-          </div>
-
-          {niveles.length > 0 ? (
-            <div className="flex flex-col gap-3">
-              <span className="text-[12.5px] font-medium text-ink-muted">Niveles disponibles</span>
-              {niveles.map((nivel, indice) => (
-                <div key={indice} className="grid grid-cols-3 gap-2 rounded-md border border-line p-3">
-                  <input
-                    value={nivel.nombre}
-                    onChange={(evento) => actualizarNivel(indice, "nombre", evento.target.value)}
-                    placeholder="Nombre nivel"
-                    className="h-9 rounded-md border border-line-strong px-2 text-sm outline-none focus:border-accent"
-                  />
-                  <input
-                    value={nivel.valor}
-                    onChange={(evento) => actualizarNivel(indice, "valor", evento.target.value)}
-                    placeholder="Valor"
-                    type="number"
-                    step="any"
-                    className="h-9 rounded-md border border-line-strong px-2 text-sm outline-none focus:border-accent"
-                  />
-                  <input
-                    value={nivel.unidad}
-                    onChange={(evento) => actualizarNivel(indice, "unidad", evento.target.value)}
-                    placeholder="Unidad"
-                    className="h-9 rounded-md border border-line-strong px-2 text-sm outline-none focus:border-accent"
-                  />
-                </div>
-              ))}
-            </div>
-          ) : null}
-        </div>
-
-        <div className="flex flex-wrap items-center gap-3 lg:col-span-3">
+        <div className="flex flex-wrap items-center gap-3 lg:col-span-2">
           <button
             type="button"
             onClick={limpiarFormulario}

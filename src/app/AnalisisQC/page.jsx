@@ -4,6 +4,7 @@
 // auditoria son ficticios y se guardan unicamente en localStorage.
 
 import Link from "next/link";
+import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import { obtenerAnalitoPorId } from "@/lib/mockData";
 import { useRegistrarResultado, useTodosLosControles } from "@/lib/useControlesStore";
@@ -119,76 +120,159 @@ function PanelAutenticacion({ usuarioAutenticado, alAutenticar, alCerrarSesion, 
   }
 
   return (
-    <Card as="section">
-      <div className="grid lg:grid-cols-[0.78fr_1.22fr]">
-        <div className="relative overflow-hidden bg-accent-strong p-5 text-white sm:p-6">
-          <div className="absolute -right-10 -top-12 size-36 rounded-full border border-white/10" aria-hidden="true" />
-          <div className="absolute -bottom-16 right-10 size-28 rounded-full bg-white/[0.04]" aria-hidden="true" />
-          <span className="mb-7 flex size-10 items-center justify-center rounded-xl border border-white/15 bg-white/10">
-            <svg viewBox="0 0 24 24" className="size-5" fill="none" stroke="currentColor" strokeWidth="1.7" aria-hidden="true">
-              <path d="M7.5 10V7a4.5 4.5 0 0 1 9 0v3" />
-              <rect x="5" y="10" width="14" height="10" rx="2.5" />
-              <path d="M12 14v2.5" />
-            </svg>
-          </span>
-          <p className="m-0 text-[10px] font-semibold uppercase tracking-[0.16em] text-white/55">Trazabilidad QC</p>
-          <h2 className="m-0 mt-2 text-[18px] font-semibold tracking-tight">Identificación requerida</h2>
-          <p className="m-0 mt-2 max-w-sm text-[12.5px] leading-5 text-white/65">
-            Identifícate antes de ingresar resultados. Cada cambio quedará asociado al usuario autenticado.
-          </p>
+    <section className="fixed inset-0 z-[100] overflow-y-auto bg-white">
+      <div className="grid min-h-screen lg:grid-cols-[0.92fr_1.08fr]">
+        <div className="relative flex overflow-hidden bg-[#0b0d10] p-6 text-white sm:p-8 lg:min-h-screen lg:p-10">
+          <div className="absolute -right-24 -top-24 size-72 rounded-full border border-white/10" aria-hidden="true" />
+          <div className="absolute -bottom-32 -left-20 size-72 rounded-full bg-white/[0.025]" aria-hidden="true" />
+          <div className="absolute right-12 top-24 size-2 rounded-full bg-status-ok shadow-[0_0_30px_8px_rgba(21,128,61,0.45)]" aria-hidden="true" />
+
+          <div className="relative z-10 flex w-full flex-col">
+            <Image
+              src="/leveayqclogo.png"
+              alt="LeveyQC"
+              width={1600}
+              height={696}
+              priority
+              className="h-auto w-36 object-contain sm:w-40"
+            />
+
+            <div className="my-9 h-px w-12 bg-white/20" aria-hidden="true" />
+            <p className="m-0 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/45">
+              Plataforma de control de calidad
+            </p>
+            <h2 className="m-0 mt-3 max-w-md text-[25px] font-semibold leading-[1.18] tracking-[-0.025em] sm:text-[30px]">
+              Cada resultado comienza con una identidad verificada.
+            </h2>
+            <p className="m-0 mt-4 max-w-md text-[13px] leading-6 text-white/55">
+              Accede al entorno de registro para mantener la trazabilidad de controles, resultados y responsables.
+            </p>
+
+            <div className="mt-10 hidden gap-3 sm:grid-cols-2 lg:mt-auto lg:grid lg:pt-10">
+              <div className="rounded-lg border border-white/10 bg-white/[0.035] p-3.5">
+                <span className="mb-2 flex size-7 items-center justify-center rounded-md bg-white/10 text-white/70">
+                  <svg viewBox="0 0 24 24" className="size-4" fill="none" stroke="currentColor" strokeWidth="1.7" aria-hidden="true">
+                    <path d="M12 3l7 3v5c0 5-3.5 7.5-7 9-3.5-1.5-7-4-7-9V6l7-3z" />
+                    <path d="M9 12l2 2 4-4" />
+                  </svg>
+                </span>
+                <p className="m-0 text-[11.5px] font-medium text-white/80">Acceso controlado</p>
+                <p className="m-0 mt-1 text-[10.5px] leading-4 text-white/35">Registro asociado a cada usuario.</p>
+              </div>
+              <div className="rounded-lg border border-white/10 bg-white/[0.035] p-3.5">
+                <span className="mb-2 flex size-7 items-center justify-center rounded-md bg-white/10 text-white/70">
+                  <svg viewBox="0 0 24 24" className="size-4" fill="none" stroke="currentColor" strokeWidth="1.7" aria-hidden="true">
+                    <path d="M5 4h14v16H5z" />
+                    <path d="M8 9h8M8 13h8M8 17h5" />
+                  </svg>
+                </span>
+                <p className="m-0 text-[11.5px] font-medium text-white/80">Trazabilidad QC</p>
+                <p className="m-0 mt-1 text-[10.5px] leading-4 text-white/35">Historial claro y auditable.</p>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <form onSubmit={manejarEnvio} className="p-5 sm:p-6">
-          <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
-            <div>
-              <h3 className="m-0 text-[14px] font-semibold text-ink">Acceso de demostración</h3>
-              <p className="m-0 mt-1 text-[11.5px] text-ink-faint">Usa las credenciales indicadas para continuar.</p>
+        <form onSubmit={manejarEnvio} className="flex flex-col justify-center p-6 sm:p-8 lg:px-12 lg:py-10">
+          <div className="mx-auto w-full max-w-[430px]">
+            <div className="mb-7 flex items-start justify-between gap-4">
+              <div>
+                <p className="m-0 text-[10px] font-semibold uppercase tracking-[0.14em] text-ink-faint">Área segura</p>
+                <h3 className="m-0 mt-2 text-[24px] font-semibold tracking-[-0.025em] text-ink">Inicia sesión</h3>
+                <p className="m-0 mt-2 text-[12.5px] leading-5 text-ink-muted">
+                  Ingresa tus credenciales para acceder al registro de controles.
+                </p>
+              </div>
+              <span className="shrink-0 rounded-full bg-accent-soft px-2.5 py-1 text-[10px] font-semibold text-accent">
+                Demo
+              </span>
             </div>
-            <span className="rounded-full bg-accent-soft px-2.5 py-1 text-[10.5px] font-semibold text-accent">Solo maqueta</span>
-          </div>
 
-          <div className="grid gap-3 sm:grid-cols-[1fr_1fr_auto] sm:items-end">
-            <label className="flex flex-col gap-1.5">
-              <span className="text-[11.5px] font-semibold text-ink-muted">Usuario</span>
-              <input
-                value={nombreUsuarioIngresado}
-                onChange={(evento) => establecerNombreUsuarioIngresado(evento.target.value)}
-                autoComplete="username"
-                placeholder="bolate"
-                className="h-10 rounded-md border border-line-strong px-3 text-[13px] outline-none transition focus:border-accent focus:ring-2 focus:ring-accent-soft"
-              />
-            </label>
-            <label className="flex flex-col gap-1.5">
-              <span className="text-[11.5px] font-semibold text-ink-muted">Contraseña</span>
-              <input
-                type="password"
-                value={contrasenaIngresada}
-                onChange={(evento) => establecerContrasenaIngresada(evento.target.value)}
-                autoComplete="current-password"
-                placeholder="123123"
-                className="h-10 rounded-md border border-line-strong px-3 text-[13px] outline-none transition focus:border-accent focus:ring-2 focus:ring-accent-soft"
-              />
-            </label>
+            <div className="flex flex-col gap-4">
+              <label className="flex flex-col gap-2">
+                <span className="text-[11.5px] font-semibold text-ink-muted">Usuario</span>
+                <div className="relative">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" aria-hidden="true" className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-ink-faint">
+                    <circle cx="12" cy="8" r="3.5" />
+                    <path d="M5.5 20c.8-4 3.2-6 6.5-6s5.7 2 6.5 6" />
+                  </svg>
+                  <input
+                    value={nombreUsuarioIngresado}
+                    onChange={(evento) => establecerNombreUsuarioIngresado(evento.target.value)}
+                    autoComplete="username"
+                    placeholder="Ingresa tu usuario"
+                    className="h-11 w-full rounded-lg border border-line-strong bg-white pl-10 pr-3 text-[13px] text-ink outline-none transition placeholder:text-ink-faint focus:border-accent focus:ring-2 focus:ring-accent-soft"
+                  />
+                </div>
+              </label>
+
+              <label className="flex flex-col gap-2">
+                <span className="text-[11.5px] font-semibold text-ink-muted">Contraseña</span>
+                <div className="relative">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" aria-hidden="true" className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-ink-faint">
+                    <path d="M7.5 10V7a4.5 4.5 0 0 1 9 0v3" />
+                    <rect x="5" y="10" width="14" height="10" rx="2.5" />
+                    <path d="M12 14v2.5" />
+                  </svg>
+                  <input
+                    type="password"
+                    value={contrasenaIngresada}
+                    onChange={(evento) => establecerContrasenaIngresada(evento.target.value)}
+                    autoComplete="current-password"
+                    placeholder="Ingresa tu contraseña"
+                    className="h-11 w-full rounded-lg border border-line-strong bg-white pl-10 pr-3 text-[13px] text-ink outline-none transition placeholder:text-ink-faint focus:border-accent focus:ring-2 focus:ring-accent-soft"
+                  />
+                </div>
+              </label>
+            </div>
+
+            <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
+              <label className="flex items-center gap-2 text-[11.5px] text-ink-muted">
+                <input type="checkbox" className="size-3.5 rounded border-line-strong accent-black" />
+                Mantener sesión iniciada
+              </label>
+              <button type="button" className="text-[11.5px] font-semibold text-ink-muted hover:text-ink hover:underline">
+                Recuperar acceso
+              </button>
+            </div>
+
+            <p className="m-0 mt-3 min-h-4 text-[11px] font-medium text-status-alert" role="alert">
+              {mensajeError}
+            </p>
+
             <button
               type="submit"
-              className="inline-flex h-10 items-center justify-center rounded-md bg-accent-strong px-5 text-[12px] font-semibold text-white transition hover:bg-[#27272a]"
+              className="mt-2 inline-flex h-11 w-full items-center justify-center rounded-lg bg-accent-strong px-5 text-[12.5px] font-semibold text-white transition hover:bg-[#27272a] focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2"
             >
-              Ingresar
+              Ingresar a LeveyQC
             </button>
-          </div>
 
-          <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
-            <p className="m-0 text-[11px] text-ink-faint">
-              Usuario: <strong className="font-semibold text-ink-muted">bolate</strong> · Contraseña:{" "}
-              <strong className="font-semibold text-ink-muted">123123</strong>
-            </p>
-            <p className="m-0 text-[11px] font-medium text-status-alert" role="alert">
-              {mensajeError}
+            <div className="mt-6 rounded-lg border border-line bg-surface-muted p-4">
+              <div className="flex items-center justify-between gap-3">
+                <p className="m-0 text-[11px] font-semibold text-ink-muted">Credenciales de demostración</p>
+                <span className="rounded-full bg-white px-2 py-0.5 text-[9.5px] font-semibold uppercase tracking-wide text-ink-faint">
+                  Mock
+                </span>
+              </div>
+              <div className="mt-3 grid grid-cols-2 gap-3">
+                <div>
+                  <p className="m-0 text-[9.5px] uppercase tracking-wide text-ink-faint">Usuario</p>
+                  <p className="m-0 mt-1 font-mono text-[12px] font-semibold text-ink">bolate</p>
+                </div>
+                <div>
+                  <p className="m-0 text-[9.5px] uppercase tracking-wide text-ink-faint">Contraseña</p>
+                  <p className="m-0 mt-1 font-mono text-[12px] font-semibold text-ink">123123</p>
+                </div>
+              </div>
+            </div>
+
+            <p className="m-0 mt-5 text-center text-[10.5px] text-ink-faint">
+              Acceso protegido · Laboratorio Central
             </p>
           </div>
         </form>
       </div>
-    </Card>
+    </section>
   );
 }
 
