@@ -18,16 +18,14 @@ export default function PaginaInicioSesion() {
               className="h-auto w-48 object-contain sm:w-52"
             />
 
-            <div className="my-7 h-px w-12 bg-white/20 lg:my-9" aria-hidden="true" />
-            <p className="m-0 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/85 drop-shadow-[0_1px_8px_rgba(0,0,0,0.9)]">
-              Plataforma de control de calidad
-            </p>
-            <h1 className="m-0 mt-3 max-w-lg !text-[28px] !font-semibold !leading-[1.18] !tracking-[-0.025em] !text-white drop-shadow-[0_2px_14px_rgba(0,0,0,0.95)] sm:!text-[33px]">
+            <h1 className="m-0 mt-8 max-w-lg !text-[28px] !font-semibold !leading-[1.18] !tracking-[-0.025em] !text-white drop-shadow-[0_2px_14px_rgba(0,0,0,0.95)] sm:!text-[33px]">
               Ciencia, precisión y confianza en cada resultado.
             </h1>
-            <p className="m-0 mt-4 hidden max-w-lg text-[14px] leading-7 text-white/75 drop-shadow-[0_1px_8px_rgba(0,0,0,0.9)] sm:block">
-              Accede al entorno de registro para mantener la trazabilidad de controles, resultados y responsables.
-            </p>
+            <div className="mt-5 hidden max-w-lg space-y-2 text-[14px] leading-6 text-white/75 drop-shadow-[0_1px_8px_rgba(0,0,0,0.9)] sm:block">
+              <p className="m-0">QC operativo completo.</p>
+              <p className="m-0">Motor de inteligencia analítica.</p>
+              <p className="m-0">Performance analítica avanzada.</p>
+            </div>
           </div>
         </section>
 
