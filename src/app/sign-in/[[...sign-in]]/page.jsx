@@ -15,17 +15,15 @@ export default function PaginaInicioSesion() {
               width={1600}
               height={696}
               priority
-              className="h-auto w-48 object-contain sm:w-52"
+              className="h-auto w-60 object-contain sm:w-72"
             />
 
-            <h1 className="m-0 mt-8 max-w-lg !text-[28px] !font-semibold !leading-[1.18] !tracking-[-0.025em] !text-white drop-shadow-[0_2px_14px_rgba(0,0,0,0.95)] sm:!text-[33px]">
+            <h1 className="m-0 mt-8 max-w-[640px] !text-[32px] !font-semibold !leading-[1.14] !tracking-[-0.03em] !text-white drop-shadow-[0_2px_14px_rgba(0,0,0,0.95)] sm:!text-[40px] lg:!text-[42px]">
               Ciencia, precisión y confianza en cada resultado.
             </h1>
-            <div className="mt-5 hidden max-w-lg space-y-2 text-[14px] leading-6 text-white/75 drop-shadow-[0_1px_8px_rgba(0,0,0,0.9)] sm:block">
-              <p className="m-0">QC operativo completo.</p>
-              <p className="m-0">Motor de inteligencia analítica.</p>
-              <p className="m-0">Performance analítica avanzada.</p>
-            </div>
+            <p className="m-0 mt-4 max-w-[560px] text-[15px] font-normal leading-6 tracking-[0.005em] text-white/55 drop-shadow-[0_1px_8px_rgba(0,0,0,0.8)] sm:text-[16px]">
+              Control de calidad para laboratorios clínicos.
+            </p>
           </div>
         </section>
 

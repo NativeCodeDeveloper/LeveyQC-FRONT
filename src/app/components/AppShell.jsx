@@ -8,6 +8,8 @@ import {
   useOrganization,
   useUser,
 } from "@clerk/nextjs";
+import { Building2 } from "lucide-react";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import Sidebar from "../Sidebar";
 
@@ -17,6 +19,7 @@ export default function AppShell({ children }) {
   const { organization } = useOrganization();
   const nombreInstitucion =
     organization?.name ?? user?.publicMetadata?.institucion ?? "Laboratorio Central";
+  const logoInstitucion = organization?.imageUrl;
   const nombreUsuario =
     user?.fullName ??
     user?.username ??
@@ -31,7 +34,7 @@ export default function AppShell({ children }) {
     <div className="grid min-h-screen grid-cols-[auto_minmax(0,1fr)] bg-canvas max-[860px]:grid-cols-1">
       <Sidebar />
       <div className="flex min-w-0 flex-col">
-        <header className="sticky top-0 z-30 flex h-16 shrink-0 items-center justify-end gap-3 border-b border-line bg-white px-6">
+        <header className="sticky top-0 z-30 flex h-20 shrink-0 items-center justify-end gap-3 border-b border-line bg-white px-6">
           <Show when="signed-out">
             <SignInButton>
               <button type="button" className="text-[12.5px] font-semibold text-ink-muted transition hover:text-ink">
@@ -45,22 +48,43 @@ export default function AppShell({ children }) {
             </SignUpButton>
           </Show>
           <Show when="signed-in">
-            <div className="flex items-center gap-3">
-              <div className="hidden min-w-0 text-right sm:block">
-                <p className="m-0 truncate text-[11px] font-medium leading-tight text-ink-muted">
+            <div className="flex items-center gap-3 rounded-2xl bg-white p-1.5 pl-2.5">
+              <div className="hidden size-13 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-surface-muted text-ink-muted sm:flex">
+                {logoInstitucion ? (
+                  <Image
+                    src={logoInstitucion}
+                    alt="Logo de la institución"
+                    width={52}
+                    height={52}
+                    unoptimized
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  <Building2 className="size-5" aria-hidden="true" />
+                )}
+              </div>
+              <div className="hidden min-w-0 max-w-64 pr-1 text-left sm:block">
+                <p className="m-0 truncate text-[12px] font-semibold leading-4 text-ink-muted">
                   {nombreInstitucion}
                 </p>
-                <p className="m-0 mt-1 truncate text-[13px] font-semibold leading-tight text-ink">
+                <p className="m-0 mt-0.5 truncate text-[15px] font-semibold leading-5 tracking-[-0.015em] text-ink">
                   {nombreUsuario}
                 </p>
               </div>
-              <UserButton
-                appearance={{
-                  elements: {
-                    userButtonAvatarBox: "!h-11 !w-11",
-                  },
-                }}
-              />
+              <div className="relative shrink-0 rounded-full">
+                <UserButton
+                  appearance={{
+                    elements: {
+                      userButtonAvatarBox: "!h-13 !w-13",
+                      userButtonTrigger: "!rounded-full !outline-none focus:!shadow-none",
+                    },
+                  }}
+                />
+                <span
+                  className="pointer-events-none absolute bottom-0.5 right-0.5 size-2.5 rounded-full bg-status-ok"
+                  aria-hidden="true"
+                />
+              </div>
             </div>
           </Show>
         </header>
