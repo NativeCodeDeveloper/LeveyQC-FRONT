@@ -1,11 +1,27 @@
 "use client";
 
-import { Show, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
+import {
+  Show,
+  SignInButton,
+  SignUpButton,
+  UserButton,
+  useOrganization,
+  useUser,
+} from "@clerk/nextjs";
 import { usePathname } from "next/navigation";
 import Sidebar from "../Sidebar";
 
 export default function AppShell({ children }) {
   const rutaActual = usePathname();
+  const { user } = useUser();
+  const { organization } = useOrganization();
+  const nombreInstitucion =
+    organization?.name ?? user?.publicMetadata?.institucion ?? "Laboratorio Central";
+  const nombreUsuario =
+    user?.fullName ??
+    user?.username ??
+    user?.primaryEmailAddress?.emailAddress ??
+    "Usuario";
 
   if (rutaActual.startsWith("/sign-in")) {
     return children;
@@ -29,14 +45,23 @@ export default function AppShell({ children }) {
             </SignUpButton>
           </Show>
           <Show when="signed-in">
-            <UserButton
-              showName
-              appearance={{
-                elements: {
-                  userButtonAvatarBox: "!h-11 !w-11",
-                },
-              }}
-            />
+            <div className="flex items-center gap-3">
+              <div className="hidden min-w-0 text-right sm:block">
+                <p className="m-0 truncate text-[11px] font-medium leading-tight text-ink-muted">
+                  {nombreInstitucion}
+                </p>
+                <p className="m-0 mt-1 truncate text-[13px] font-semibold leading-tight text-ink">
+                  {nombreUsuario}
+                </p>
+              </div>
+              <UserButton
+                appearance={{
+                  elements: {
+                    userButtonAvatarBox: "!h-11 !w-11",
+                  },
+                }}
+              />
+            </div>
           </Show>
         </header>
         <main className="min-w-0 p-9 max-[860px]:p-[24px_18px]">{children}</main>
