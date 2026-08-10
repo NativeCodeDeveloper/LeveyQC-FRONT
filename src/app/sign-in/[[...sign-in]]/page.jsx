@@ -21,8 +21,8 @@ export default function PaginaInicioSesion() {
             <h1 className="m-0 mt-8 max-w-[640px] !text-[32px] !font-semibold !leading-[1.14] !tracking-[-0.03em] !text-white drop-shadow-[0_2px_14px_rgba(0,0,0,0.95)] sm:!text-[40px] lg:!text-[42px]">
               Ciencia, precisión y confianza en cada resultado.
             </h1>
-            <p className="m-0 mt-4 max-w-[560px] text-[15px] font-normal leading-6 tracking-[0.005em] text-white/55 drop-shadow-[0_1px_8px_rgba(0,0,0,0.8)] sm:text-[16px]">
-              Control de calidad para laboratorios clínicos.
+            <p className="m-0 mt-4 max-w-[560px] text-[19px] font-normal leading-7 tracking-[0.005em] text-white/55 drop-shadow-[0_1px_8px_rgba(0,0,0,0.8)] sm:text-[20px]">
+              Inteligencia artificial para una nueva generación de control de laboratorios clínicos.
             </p>
           </div>
         </section>
