@@ -20,8 +20,8 @@ import { categorias } from "@/lib/mockData";
 const grupos = [
   {
     id: "analisis-qc",
-    titulo: "Análisis QC",
-    iconoRiel: "reglas",
+    titulo: "Control de Calidad del Laboratorio",
+    iconoRiel: "microscopio",
     items: [
       { etiqueta: "Registro QC", href: "/AnalisisQC", icono: "registro" },
       {
@@ -40,8 +40,8 @@ const grupos = [
   },
   {
     id: "gestion",
-    titulo: "Gestión",
-    iconoRiel: "equipos",
+    titulo: "Gestión del Laboratorio Clínico",
+    iconoRiel: "controles",
     items: [
       { etiqueta: "Equipos / Analizadores", icono: "equipos" },
       { etiqueta: "Reactivos / Lotes", icono: "reactivos" },
@@ -52,8 +52,8 @@ const grupos = [
   },
   {
     id: "administracion",
-    titulo: "Administración",
-    iconoRiel: "usuarios",
+    titulo: "Configuraciones de LeveyQC",
+    iconoRiel: "registro",
     items: [
       { etiqueta: "Proveedores", href: "/Proveedores", icono: "proveedores" },
       { etiqueta: "Usuarios", icono: "usuarios" },
@@ -75,6 +75,7 @@ const grupos = [
 // una libreria de iconos). Un solo componente con un mapa de paths en vez de
 // un archivo por icono: mas facil de mantener y de revisar de un vistazo.
 const trazosPorIcono = {
+  microscopio: <><path d="M6 18h8" /><path d="M3 22h18" /><path d="M14 22a7 7 0 1 0 0-14h-1" /><path d="M9 14h2" /><path d="M9 12a2 2 0 0 1-2-2V6h6v4a2 2 0 0 1-2 2Z" /><path d="M12 6V3a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v3" /></>,
   registro: <><path d="M5 5h9M5 10h9M5 15h6" /><path d="M17 13l3 3-6 6h-3v-3z" /></>,
   controles: <><path d="M9 3h6M10 3v5.5L5.5 17a2 2 0 0 0 1.8 3h9.4a2 2 0 0 0 1.8-3L14 8.5V3" /></>,
   calibradores: <><circle cx="12" cy="12" r="7" /><circle cx="12" cy="12" r="2.6" /></>,
@@ -158,15 +159,21 @@ function RielDeIconos({ grupoActivoId, alSeleccionarGrupo }) {
               key={grupo.id}
               type="button"
               onClick={() => alSeleccionarGrupo(grupo.id)}
-              title={grupo.titulo}
+              aria-label={grupo.titulo}
               aria-pressed={activo}
-              className={`flex size-10 items-center justify-center rounded-lg border transition ${
+              className={`group relative flex size-10 items-center justify-center rounded-lg border transition ${
                 activo
                   ? "border-transparent bg-sidebar-active-bg text-sidebar-text"
                   : "border-transparent text-sidebar-text-muted hover:bg-sidebar-hover-bg hover:text-sidebar-text"
               }`}
             >
               <IconoItem nombre={grupo.iconoRiel} />
+              <span
+                aria-hidden="true"
+                className="pointer-events-none absolute left-full z-50 ml-3 whitespace-nowrap rounded-md border border-sidebar-border bg-[#15181d] px-2.5 py-1.5 text-[11px] font-medium text-sidebar-text opacity-0 shadow-[0_8px_24px_rgba(0,0,0,0.35)] transition-opacity duration-150 group-hover:opacity-100 group-focus-visible:opacity-100"
+              >
+                {grupo.titulo}
+              </span>
             </button>
           );
         })}
@@ -387,6 +394,16 @@ export default function Sidebar() {
           alColapsar={() => setColapsado((actual) => !actual)}
           onNavegar={() => setAbiertoEnMovil(false)}
         />
+        <div className="pointer-events-none absolute left-full top-0 flex h-20 items-center pl-7 max-[860px]:hidden">
+          <Image
+            src="/leveyblanco.png"
+            alt="LeveyQC"
+            width={2149}
+            height={732}
+            priority
+            className="h-12 w-52 object-cover"
+          />
+        </div>
       </aside>
     </>
   );
