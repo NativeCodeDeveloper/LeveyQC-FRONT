@@ -4,16 +4,11 @@ import { SignIn } from "@clerk/nextjs";
 export function Auth() {
   return (
     <div className="flex w-full max-w-[510px] flex-col items-center">
-      <div className="relative w-full overflow-hidden rounded-[32px] border border-white/[0.16] bg-[#050812]/35 p-5 text-sidebar-text shadow-[0_40px_120px_rgba(0,0,0,0.44)] backdrop-blur-3xl sm:p-8">
+      <div className="relative isolate w-full transform-gpu overflow-hidden rounded-[32px] border border-white/[0.22] bg-white/[0.045] bg-clip-padding p-5 text-sidebar-text shadow-[0_40px_120px_rgba(0,0,0,0.34),0_0_80px_rgba(91,61,196,0.12)] backdrop-blur-xl backdrop-saturate-150 sm:p-8">
         <div
           aria-hidden="true"
           className="pointer-events-none absolute inset-x-10 top-0 h-px bg-gradient-to-r from-transparent via-white/70 to-transparent"
         />
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute -right-20 -top-24 size-56 rounded-full bg-violet-400/10 blur-3xl"
-        />
-
         <div className="relative mb-7 flex justify-center">
           <Image
             src="/leveayqclogo.png"
